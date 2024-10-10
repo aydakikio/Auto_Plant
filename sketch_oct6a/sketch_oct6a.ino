@@ -1,13 +1,18 @@
 //#include <U8g2lib.h>
+#include <avr/sleep.h>
+#include <avr/power.h>
+#include <avr/wdt.h>
 
 //U8G2_SH1106_128X64_NONAME_2_HW_I2C u8g2(U8G2_R0, -1, A5, A4);
 
 void setup() {
-  // put your setup code here, to run once:
+  // put your setup code here, to run once: potos --> 8 other 9
+  
   //u8g2.begin();
+  
 
-  pinMode(4, OUTPUT) ;// pothos moisture sensor power
-  pinMode(3 , OUTPUT ) ;// other moisture sensor power
+  pinMode(8, OUTPUT) ;// pothos moisture sensor power
+  pinMode(9 , OUTPUT ) ;// other moisture sensor power
 
   pinMode(A2, INPUT); //pothos sensor in
 
@@ -19,8 +24,8 @@ void setup() {
 
    pinMode(13 , OUTPUT); // water sensor
 
-  digitalWrite(4, LOW); // moisture 
-  digitalWrite(3 , LOW);
+  digitalWrite(8, LOW); // moisture 
+  digitalWrite(9 , LOW);
 
   digitalWrite(13 , LOW); // water sensor 
 
@@ -30,10 +35,24 @@ void setup() {
   digitalWrite(11, LOW);
   digitalWrite(12, LOW);
 
+  //power off unnessary pins
+  digitalWrite(A0, LOW);
+  digitalWrite(A3, LOW);
+  digitalWrite(A4, LOW);
+  digitalWrite(A5, LOW);
+
+  digitalWrite(2, LOW);
+  digitalWrite(10, LOW);
+  digitalWrite(4, LOW);
+  digitalWrite(3, LOW);
+
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+    
+    sleep_disable();
+    power_all_enable (); 
 
     check_pothos_moisture();
     Check_barg_ghashogy_moisture();
@@ -50,17 +69,22 @@ void loop() {
 
   } while (u8g2.nextPage());
   */
-  delay(28800000);
+
+  delay(70);
+  Deep_Sleep_Manual();
+
+  delay(86400000);//24 hour check
+  //delay(28800000); // 8 hour check
 }
 
 int check_pothos_moisture(){
 
-  digitalWrite(4 , HIGH );
+  digitalWrite(8 , HIGH );
   delay(30);
 
   int val = analogRead(A2);
 
-  digitalWrite(4 ,LOW );
+  digitalWrite(8 ,LOW );
 
   delay(500);
 
@@ -80,11 +104,11 @@ int check_pothos_moisture(){
 }
 
 void Check_barg_ghashogy_moisture(){
-  digitalWrite(3, HIGH);
+  digitalWrite(9, HIGH);
   delay(30);
   int val = digitalRead(7);
 
-  digitalWrite(3, LOW);
+  digitalWrite(9, LOW);
 
   delay(500);
 
@@ -108,7 +132,7 @@ int check_water_sensor(){
 
   digitalWrite(13 , LOW);
 
-  if(val < 395 ){
+  if(val < 360 ){
     //No water
     return 1;
   }  else {
@@ -125,7 +149,8 @@ void turn_on_pothos_water_pomps(){
   digitalWrite(5 , HIGH);
   digitalWrite(6 , HIGH);
 
-  delay (450000);
+  delay(120000);
+  delay (300000);
 
   digitalWrite(5, LOW);
   digitalWrite(6 , LOW);
@@ -136,9 +161,29 @@ void turn_on_barg_ghashogi_water_pump(){
   digitalWrite(11 , HIGH);
   digitalWrite(12 , HIGH);
 
-  delay (450000);
+  delay(120000);
+  delay (300000);
 
   digitalWrite(11, LOW);
   digitalWrite(12 , LOW);
+
+}
+
+
+
+void Deep_Sleep_Manual(){
+
+  
+  set_sleep_mode (SLEEP_MODE_IDLE);
+
+  power_all_disable (); // power off ADC, Timer 0 and 1, serial interface
+
+  noInterrupts ();       // timed sequence coming up
+
+  sleep_enable ();       // ready to sleep
+
+  interrupts ();         // interrupts are required now
+
+  sleep_cpu ();          // sleep     
 
 }
