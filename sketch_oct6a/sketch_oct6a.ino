@@ -84,21 +84,24 @@ int check_pothos_moisture(){
 
   int val = analogRead(A2);
 
-  digitalWrite(8 ,LOW );
+  
 
   delay(500);
 
   if(val > 800){
 
     if(check_water_sensor() == 0 ){
-       turn_on_pothos_water_pomps();
+      while (analogRead(A2) > 800) {
+      turn_on_pothos_water_pomps(0);
+      }
+       turn_on_pothos_water_pomps(1);
     }
   
   } else if  ((val < 800) && (val > -1) ) {
 
     //ITS OK!!
   }
-  
+    digitalWrite(8 ,LOW );
 
   return val;
 }
@@ -108,20 +111,25 @@ void Check_barg_ghashogy_moisture(){
   delay(30);
   int val = digitalRead(7);
 
-  digitalWrite(9, LOW);
+  
 
   delay(500);
 
   if(val == 1 ){
     //turn on water pomp
     if(check_water_sensor() == 0){
+      while (digitalRead(7) == 1 ) {
+        turn_on_barg_ghashogi_water_pump(0);
+      }
 
-      turn_on_barg_ghashogi_water_pump();
+      turn_on_barg_ghashogi_water_pump(1);
 
     }
   } else {
     //Its Ok
   }
+
+  digitalWrite(9, LOW);
 }
 
 int check_water_sensor(){
@@ -144,28 +152,34 @@ int check_water_sensor(){
   
 }
 
-void turn_on_pothos_water_pomps(){
+void turn_on_pothos_water_pomps(int mode ){
 
-  digitalWrite(5 , HIGH);
-  digitalWrite(6 , HIGH);
-
-  delay(120000);
-  delay (300000);
-
-  digitalWrite(5, LOW);
-  digitalWrite(6 , LOW);
-
+  switch (mode) {
+  case 0:
+    digitalWrite(5 , HIGH);
+   digitalWrite(6 , HIGH);
+  break;
+  case 1:
+    digitalWrite(5, LOW);
+    digitalWrite(6 , LOW);
+  break;
+  }
 }
-void turn_on_barg_ghashogi_water_pump(){
+void turn_on_barg_ghashogi_water_pump(int mode ){
 
-  digitalWrite(11 , HIGH);
-  digitalWrite(12 , HIGH);
 
-  delay(120000);
-  delay (300000);
+  switch (mode) {
+    case 0 :
+      digitalWrite(11 , HIGH);
+      digitalWrite(12 , HIGH);
+    break;
+    case 1 :
 
-  digitalWrite(11, LOW);
-  digitalWrite(12 , LOW);
+      digitalWrite(11, LOW);
+      digitalWrite(12 , LOW);
+
+    break;
+  }
 
 }
 
