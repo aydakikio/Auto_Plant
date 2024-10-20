@@ -9,7 +9,7 @@ void setup() {
   // put your setup code here, to run once: potos --> 8 other 9
   
   //u8g2.begin();
-  
+
 
   pinMode(8, OUTPUT) ;// pothos moisture sensor power
   pinMode(9 , OUTPUT ) ;// other moisture sensor power
@@ -84,20 +84,20 @@ int check_pothos_moisture(){
 
   int val = analogRead(A2);
 
-  
 
   delay(500);
 
-  if(val > 800){
+  if(val > 720){
 
     if(check_water_sensor() == 0 ){
-      while (analogRead(A2) > 800) {
+      while (analogRead(A2) > 720) {
       turn_on_pothos_water_pomps(0);
       }
-       turn_on_pothos_water_pomps(1);
+        
+      turn_on_pothos_water_pomps(1);
     }
   
-  } else if  ((val < 800) && (val > -1) ) {
+  } else if  ((val < 720) && (val > -1) ) {
 
     //ITS OK!!
   }
