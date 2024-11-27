@@ -1,5 +1,6 @@
 
-# Auto plant 
+![AutoPlant](./AutoPlant.jpg)
+
 
 A simple auto-watering script designed to help take care of your plants by automatically monitoring and watering them based on moisture levels.
 
@@ -24,7 +25,7 @@ A simple auto-watering script designed to help take care of your plants by autom
    Connect your Arduino to the moisture sensors, water pumps, and water level sensor. Use the water hoses to connect the pumps to the plants.
 
 2. **Download the script**:  
-   Download the script from the releases section.
+   Download the `sketch_oct6a.ino` file from the releases section.
 
 3. **Change the pin numbers**:  
    Open the script and modify the pin numbers to match the pins you're using on your Arduino.
