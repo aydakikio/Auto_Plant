@@ -1,30 +1,23 @@
-//#include <U8g2lib.h>
 #include <avr/sleep.h>
 #include <avr/power.h>
 #include <avr/wdt.h>
 
-//U8G2_SH1106_128X64_NONAME_2_HW_I2C u8g2(U8G2_R0, -1, A5, A4);
-
 void setup() {
-  // put your setup code here, to run once: potos --> 8 other 9
   
-  //u8g2.begin();
-
-
   pinMode(8, OUTPUT) ;// pothos moisture sensor power
-  pinMode(9 , OUTPUT ) ;// other moisture sensor power
+  pinMode(9 , OUTPUT ) ;// Peperomia moisture sensor power
 
-  pinMode(A2, INPUT); //pothos sensor in
+  pinMode(A2, INPUT); //pothos sensor read
 
    pinMode(6, OUTPUT); // pothos water pump
    pinMode(5, OUTPUT); //pothos water pump
 
-   pinMode(11 , OUTPUT);
-   pinMode(12 , OUTPUT);
+   pinMode(11 , OUTPUT); //Peperomia water pomp
+   pinMode(12 , OUTPUT); //Peperomia water pump
 
-   pinMode(13 , OUTPUT); // water sensor
+   pinMode(13 , OUTPUT); // water sensor 
 
-  digitalWrite(8, LOW); // moisture 
+  digitalWrite(8, LOW); 
   digitalWrite(9 , LOW);
 
   digitalWrite(13 , LOW); // water sensor 
@@ -49,32 +42,18 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
     
     sleep_disable();
     power_all_enable (); 
 
     check_pothos_moisture();
-    Check_barg_ghashogy_moisture();
+    Check_Peperomia_moisture();
 
-  /*
-  u8g2.firstPage();
-  do {
-    //u8g2.menu_items[item_selected]setFont(u8g2_font_5x7_mf);
-    //u8g2.drawStr(0, 20, "HI");
-    
-      u8g2.setFont(u8g2_font_5x7_mf);
-      u8g2.drawStr(0, 20, "HI!!");
-    
-
-  } while (u8g2.nextPage());
-  */
-
+ 
   delay(70);
   Deep_Sleep_Manual();
 
   delay(86400000);//24 hour check
-  //delay(28800000); // 8 hour check
 }
 
 int check_pothos_moisture(){
@@ -106,7 +85,7 @@ int check_pothos_moisture(){
   return val;
 }
 
-void Check_barg_ghashogy_moisture(){
+void Check_Peperomia_moisture(){
   digitalWrite(9, HIGH);
   delay(30);
   int val = digitalRead(7);
@@ -119,10 +98,10 @@ void Check_barg_ghashogy_moisture(){
     //turn on water pomp
     if(check_water_sensor() == 0){
       while (digitalRead(7) == 1 ) {
-        turn_on_barg_ghashogi_water_pump(0);
+        turn_on_Peperomia_water_pump(0);
       }
 
-      turn_on_barg_ghashogi_water_pump(1);
+      turn_on_Peperomia_water_pump(1);
 
     }
   } else {
@@ -165,7 +144,7 @@ void turn_on_pothos_water_pomps(int mode ){
   break;
   }
 }
-void turn_on_barg_ghashogi_water_pump(int mode ){
+void turn_on_Peperomia_water_pump(int mode ){
 
 
   switch (mode) {
